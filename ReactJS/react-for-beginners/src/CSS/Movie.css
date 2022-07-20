@@ -1,0 +1,11 @@
+.movie{
+    display: grid;
+    grid-template-columns: 230px auto auto;
+    grid-template-rows: 50px 172.5px 172.5px;
+    max-height: min-content;
+    column-gap: 20px;
+}
+
+.title{
+    grid-column: 1 / 4;
+}
