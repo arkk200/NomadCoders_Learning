@@ -1,18 +1,76 @@
-import { View } from 'react-native';
+import * as Location from 'expo-location'
+import { useEffect, useState } from 'react';
+import { View, Text, Dimensions, StyleSheet, ScrollView } from 'react-native';
+
+const { width:SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function App() {
-  return (
-    // React Native에서
-    // 1. 기본적으로 모든 View 컴포넌트는 Flex Container다.
-    // 2. (모바일에서) Flex Direction의 기본값은 column이다. (그러나 웹에서 Flex Direction의 기본값은 row이다.)
-    <View style={{ flex:1 }}>
-      {/* 반응형 웹을 생각해서 너비와 높이에 기반한 레이아웃은 안만드는게 좋다.
-      아이콘 / 아바타 등에는 width, height를 줄 수 있으나 레이아웃에선 width나 height를 사용하지 않는다. */}
-      <View style={{ /* (X) width: 200, height: 200, */ flex:1, backgroundColor:"tomato" }}></View>
-      <View style={{ /* (X) width: 200, height: 200, */ flex:1, backgroundColor:"teal" }}></View>
-      <View style={{ /* (X) width: 200, height: 200, */ flex:1, backgroundColor:"orange" }}></View>
-      {/* flex에 들어가는 값은 비율이다. flex:비율 (레이아웃이 하나일 때 숫자가 아무 영향을 끼치지 않는다.)
-      부모 요소에도 flex를 추가해야 자식요소의 flex가 무엇을 기준점으로 잡을 지 알 수 있다. */}
+  const [region, setRegion] = useState("Loading...");
+  const [location, setLocation] = useState();
+  const [ok, setOk] = useState(true);
+  const ask = async() => {
+    const {granted} =  await Location.requestForegroundPermissionsAsync();
+    if(!granted){
+      setOk(false);
+    }
+    const {coords:{latitude, longitude}} = await Location.getCurrentPositionAsync({accuracy:5});
+    const location = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
+    setRegion(location[0].region);
+  }
+  useEffect(() => {
+    ask();
+  })
+  return <View style={styles.container}>
+    <View style={styles.city}>
+      <Text style={styles.cityName}>{region}</Text>
     </View>
-  );
+    <ScrollView
+    pagingEnabled
+    horizontal
+    showsHorizontalScrollIndicator={false}
+    contentContainerStyle={styles.weather}
+    >
+      <View style={styles.day}>
+        <Text style={styles.temp}>27</Text>
+        <Text style={styles.description}>Sunny</Text>
+      </View>
+      <View style={styles.day}>
+        <Text style={styles.temp}>27</Text>
+        <Text style={styles.description}>Sunny</Text>
+      </View>
+      <View style={styles.day}>
+        <Text style={styles.temp}>27</Text>
+        <Text style={styles.description}>Sunny</Text>
+      </View>
+    </ScrollView>
+  </View>
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor:"skyblue"
+  },
+  city: {
+    flex: 1.1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  cityName: {
+    fontSize: 68,
+  },
+  weather: {
+  },
+  day: {
+    width:SCREEN_WIDTH,
+    alignItems:'center',
+  },
+  temp: {
+    marginTop: 30,
+    fontSize: 178
+  },
+  description: {
+    marginTop: -30,
+    fontSize: 60
+  }
+})
