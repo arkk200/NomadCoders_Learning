@@ -6,20 +6,30 @@ import { theme } from './colors';
 import { Fontisto } from '@expo/vector-icons';
 
 const STORAGE_KEY = '@toDos';
+const Clicked_WORK_KEY = '@clickedWork'
 
 export default function App() {
   const [working, setWorking] = useState(true);
   const [text, setText] = useState('');
   const [toDos, setToDos] = useState({});
-  useEffect(() => {loadToDos();}, []); // AsyncStorage에 저장된 데이터를 가져옴
-  const travel = () => setWorking(false); // Travel을 누르면 working state를 false로 만듦
-  const work = () => setWorking(true); // Work을 누르면 working state를 true로 만듦
-  const onChangeText = payload => setText(payload); 
+  useEffect(() => {loadData();}, []); // AsyncStorage에 저장된 데이터를 가져옴
+  const travel = async () => {
+    setWorking(false);
+    await AsyncStorage.setItem(Clicked_WORK_KEY, "false");
+  } // Travel을 누르면 working state를 false로 만듦
+  const work = async () => {
+    setWorking(true);
+    await AsyncStorage.setItem(Clicked_WORK_KEY, "true");
+  } // Work을 누르면 working state를 true로 만듦
+  const onChangeText = payload => setText(payload);
+  
   const saveToDos = async (toSave) => {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
   };
-  const loadToDos = async () => { // AsyncStorage에 저장된 데이터를 가져오는 함수
+  const loadData = async () => { // AsyncStorage에 저장된 데이터를 가져오는 함수
     setToDos(JSON.parse(await AsyncStorage.getItem(STORAGE_KEY)));
+    const isClicked = JSON.parse(await AsyncStorage.getItem(Clicked_WORK_KEY));
+    setWorking(isClicked !== null ? isClicked : true);
   }
   const addToDo = async () => {
     if(text === '') return;
