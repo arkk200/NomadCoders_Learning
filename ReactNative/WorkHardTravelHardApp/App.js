@@ -1,12 +1,48 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
 import { theme } from './colors';
+import { Fontisto } from '@expo/vector-icons';
+
+const STORAGE_KEY = '@toDos';
 
 export default function App() {
   const [working, setWorking] = useState(true);
-  const travel = () => setWorking(false);
-  const work = () => setWorking(true);
+  const [text, setText] = useState('');
+  const [toDos, setToDos] = useState({});
+  useEffect(() => {loadToDos();}, []); // AsyncStorage에 저장된 데이터를 가져옴
+  const travel = () => setWorking(false); // Travel을 누르면 working state를 false로 만듦
+  const work = () => setWorking(true); // Work을 누르면 working state를 true로 만듦
+  const onChangeText = payload => setText(payload); 
+  const saveToDos = async (toSave) => {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
+  };
+  const loadToDos = async () => { // AsyncStorage에 저장된 데이터를 가져오는 함수
+    setToDos(JSON.parse(await AsyncStorage.getItem(STORAGE_KEY)));
+  }
+  const addToDo = async () => {
+    if(text === '') return;
+    const newToDos = {...toDos, [Date.now()] : {text, work: working}}
+    setToDos(newToDos);
+    await saveToDos(newToDos);
+    setText('');
+  };
+  const deleteToDo = async (key) => {
+    Alert.alert(
+      "Delete to do?",
+      "Are you sure?",
+      [
+        {text:"Cancel"},
+        {test:"I'm Sure", onPress: async () => {
+          const newToDos = {...toDos};
+          delete newToDos[key];
+          setToDos(newToDos);
+          await saveToDos(newToDos);
+        }},
+      ]);
+    
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -18,20 +54,26 @@ export default function App() {
           <Text style={{...styles.btnText, color: !working ? "white" : theme.grey}}>Travel</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <TextInput
-        // keyboardType='number-pad' // 키보드 타입을 변경해주는 prop (default, number-pad, decimal-pad, numeric, email-address, phone-pad)
-        // keyboardType='email-address'
-        // keyboardType='phone-pad'
-        // keyboardType='visible-password' // 안드로이드 전용
-        // returnKeyType='search' // 완료 표시(오른쪽 아래 버튼)를 변경해주는 prop (done, go, next, search, send)
-        returnKeyType='next'
-        // returnKeyType='go'
-        secureTextEntry // 비밀번호 입력시 사용
-        multiline // 입력을 여러 줄로 표시해줌
-        // placeholderTextColor="skyblue" // placeholder 색상 변경
-        placeholder={working ? "Add a To Do" : "Where do you want to go?"} style={styles.input} />
-      </View>
+      <TextInput
+        value={text}
+        returnKeyType="done"
+        onSubmitEditing={addToDo}
+        onChangeText={onChangeText}
+        placeholder={working ? "Add a To Do" : "Where do you want to go?"}
+        style={styles.input}
+      />
+      <ScrollView>
+        {Object.keys(toDos).map((key) => 
+          toDos[key].work === working ? (
+          <View style={styles.toDo} key={key}>
+            <Text style={styles.toDoText}>{toDos[key].text}</Text>
+            <TouchableOpacity onPress={() => deleteToDo(key)}>
+              <Fontisto name="trash" size={18} color="white" />
+            </TouchableOpacity>
+          </View>
+          ) : null
+        )}
+      </ScrollView>
     </View>
   );
 }
@@ -57,7 +99,22 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 30,
-    marginTop: 15,
+    marginVertical: 15,
     fontSize: 18
-  }
+  },
+  toDo: {
+    backgroundColor: theme.toDoBg,
+    marginBottom: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  toDoText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight:"500"
+  },
 });
