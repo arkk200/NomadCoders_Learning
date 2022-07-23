@@ -37,7 +37,7 @@ export default function App() {
     setRegion(location[0].region);
     const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${API_KEY}&units=metric`);
     const json = await response.json();
-    // setDays(json.daily);
+    setDays(json.daily);
     console.log(json.daily);
   };
   useEffect(() => {
