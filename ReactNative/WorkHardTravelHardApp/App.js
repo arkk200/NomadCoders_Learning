@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Alert, Pressable } from 'react-native';
 import { theme } from './colors';
 import { Fontisto } from '@expo/vector-icons';
 
@@ -80,18 +80,17 @@ export default function App() {
       <ScrollView>
         {Object.keys(toDos).map((key) => 
           toDos[key].working === working ? (
-          <View style={styles.toDo} key={key}>
+          <Pressable style={styles.toDo} key={key} onPress={() => checkToDo(key)}>
             <Text style={{...styles.toDoText, color: toDos[key].check ? "#999999" : "white"}}>{toDos[key].text}</Text>
-            <TouchableOpacity onPress={() => deleteToDo(key)}>
-              <Fontisto name="trash" size={18} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => checkToDo(key)}>
-              <Text>C</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>F</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={{flexDirection:"row"}}>
+              <TouchableOpacity onPress={() => deleteToDo(key)} style={{marginRight: 30}}>
+                <Fontisto name="trash" size={18} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text>F</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
           ) : null
         )}
       </ScrollView>
