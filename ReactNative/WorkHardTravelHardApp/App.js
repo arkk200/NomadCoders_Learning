@@ -33,7 +33,7 @@ export default function App() {
   }
   const addToDo = async () => {
     if(text === '') return;
-    const newToDos = {...toDos, [Date.now()] : {text, work: working}}
+    const newToDos = {...toDos, [Date.now()] : {text, working, check : false}}
     setToDos(newToDos);
     await saveToDos(newToDos);
     setText('');
@@ -51,8 +51,13 @@ export default function App() {
           await saveToDos(newToDos);
         }},
       ]);
-    
   };
+  const checkToDo = async (key) => {
+    const newToDos = {...toDos};
+    newToDos[key].check = newToDos[key].check ? false : true;
+    setToDos(newToDos);
+    await saveToDos(newToDos);
+  }
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -74,11 +79,17 @@ export default function App() {
       />
       <ScrollView>
         {Object.keys(toDos).map((key) => 
-          toDos[key].work === working ? (
+          toDos[key].working === working ? (
           <View style={styles.toDo} key={key}>
-            <Text style={styles.toDoText}>{toDos[key].text}</Text>
+            <Text style={{...styles.toDoText, color: toDos[key].check ? "#999999" : "white"}}>{toDos[key].text}</Text>
             <TouchableOpacity onPress={() => deleteToDo(key)}>
               <Fontisto name="trash" size={18} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => checkToDo(key)}>
+              <Text>C</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>F</Text>
             </TouchableOpacity>
           </View>
           ) : null
@@ -123,7 +134,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   toDoText: {
-    color: "white",
     fontSize: 18,
     fontWeight:"500"
   },
