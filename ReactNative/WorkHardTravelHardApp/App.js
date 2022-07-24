@@ -27,7 +27,8 @@ export default function App() {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
   };
   const loadData = async () => { // AsyncStorage에 저장된 데이터를 가져오는 함수
-    setToDos(JSON.parse(await AsyncStorage.getItem(STORAGE_KEY)));
+    const isToDoLeft = JSON.parse(await AsyncStorage.getItem(STORAGE_KEY))
+    setToDos(isToDoLeft !== null ? isToDoLeft : {});
     const isClicked = JSON.parse(await AsyncStorage.getItem(Clicked_WORK_KEY));
     setWorking(isClicked !== null ? isClicked : true);
   }
@@ -53,6 +54,12 @@ export default function App() {
       ]);
   };
   const checkToDo = async (key) => {
+    const newToDos = {...toDos};
+    newToDos[key].check = newToDos[key].check ? false : true;
+    setToDos(newToDos);
+    await saveToDos(newToDos);
+  };
+  const fixToDo = async (key) => {
     const newToDos = {...toDos};
     newToDos[key].check = newToDos[key].check ? false : true;
     setToDos(newToDos);
@@ -85,9 +92,6 @@ export default function App() {
             <View style={{flexDirection:"row"}}>
               <TouchableOpacity onPress={() => deleteToDo(key)} style={{marginRight: 30}}>
                 <Fontisto name="trash" size={18} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text>F</Text>
               </TouchableOpacity>
             </View>
           </Pressable>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "WorkHardTravelHardApp",
-    "slug": "WorkHardTravelHardApp",
+    "name": "Work Hard Travel Hard App",
+    "slug": "whthapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +28,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
