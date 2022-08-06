@@ -25,17 +25,31 @@ const sockets = [];
 wss.on("connection", socket => {
     // 연결이 될 때마다 connection이벤트가 일어나고 sockets에 push 됨
     sockets.push(socket);
+    
+    // 닉네임이 없는 사람이 있을 수 있으므로
+    // 없는 사람은 Anon으로 설정
+    socket["nickname"] = "Anon";
+    
     console.log("Conneted to Browswer ♬");
 
     // 브라우저가 다치면 close 이벤트가 감지되고 아래 코드가 실행된다.
     socket.on("close", () => console.log("Disconnted from Browser ※"))
 
     // 백엔드에서도 메세지를 받을 때 프론트엔드에서 받았던 것처럼 message 이벤트를 쓰면 됨
-    socket.on("message", (message) => {
-        // 브라우저 배열에서 차례대로 메세지를 보냄
-        sockets.forEach(aSocket => aSocket.send(message.toString('utf8')))
-
-        // socket.send(message.toString('utf8'));
+    socket.on("message", (msg) => {
+        // 받은 메세지를 다시 JS로 바꿔줌
+        const message = JSON.parse(msg.toString('utf8'));
+        switch (message.type){
+            case "new_message":
+                // 브라우저 배열에서 차례대로 메세지를 보냄
+                sockets.forEach(aSocket => aSocket.send(`${socket.nickname}: ${message.payload}`));
+                break;
+            case "nickname":
+                // socket은 기본적으로 객체이다.
+                // 따라서 키, 값을 추가할 수 있다.
+                socket["nickname"] = message.payload;
+                break;
+        }
     });
     
     // 백엔드에서 메세지를 보냄

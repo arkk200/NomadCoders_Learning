@@ -53,7 +53,11 @@ function handleSubmit(event) {
 function handleNickSubmit(event) {
     event.preventDefault();
     const input = nickForm.querySelector('input');
+
+    // JSON 형태로 파일 보내는 까닭은 Go, Java 등등의 언어로 도는 백엔드는
+    // Javascript 오브젝트를 이해하지 못하기 때문이다.
     socket.send(makeMessage("nickname", input.value));
+    input.value = '';
 }
 
 messageForm.addEventListener('submit', handleSubmit);
