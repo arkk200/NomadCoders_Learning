@@ -1,5 +1,11 @@
 const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("form");
+const nickForm = document.querySelector("#nick");
+const messageForm = document.querySelector("#message");
+
+function makeMessage(type, payload) {
+    const msg = { type, payload };
+    return JSON.stringify(msg);
+}
 
 // websocket은 ws로 주소가 시작해야 한다.
 // 또한 모바일에선 localhost가 존재하지 않으므로
@@ -17,7 +23,9 @@ socket.addEventListener('open', () => {
 // 백엔드에서 오는 메세지를 감지
 socket.addEventListener('message', message => {
     // 프론트엔드에서 메세지를 받음
-    console.log("New message: ", message.data);
+    const li = document.createElement('li');
+    li.innerText = message.data;
+    messageList.append(li);
 });
 
 socket.addEventListener('close', () => {
@@ -34,9 +42,19 @@ setTimeout(() => {
 function handleSubmit(event) {
     event.preventDefault();
     const input = messageForm.querySelector('input');
-    socket.send(input.value);
+
+    // 백엔드에 보내는 타입이 2가지인 경우 JSON object 형식으로
+    // type을 추가하여 백엔드에 보낸다. 단, 보낼 땐 문자열 형태로 보냄
+    socket.send(makeMessage("new_message", input.value));
     // console.log(input.value);
     input.value = '';
 }
 
+function handleNickSubmit(event) {
+    event.preventDefault();
+    const input = nickForm.querySelector('input');
+    socket.send(makeMessage("nickname", input.value));
+}
+
 messageForm.addEventListener('submit', handleSubmit);
+nickForm.addEventListener('submit', handleNickSubmit);
