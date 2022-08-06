@@ -28,10 +28,12 @@ socket.io로 넘어오며 발전된 점
 
 io.on("connection", socket => {
     // socket.on 뒤에 원하는 이벤트를 넣으면 된다.
-    socket.on("enter_room", (msg, done) => {
-        console.log(msg);
+    socket.on("enter_room", (roomName, done) => {
+        console.log(roomName);
         setTimeout(() => {
-            done();
+            // 프론트에서 실행되는 함수의 인자를 백에서 줄 수 있다.
+            done("hello from the backend"); // done 함수 내에 있는 코드는 프론트에서 실행됨
+            // socketIO의 또다른 좋은 점은 백에서 프론트의 함수를 실행시킬 수 있다는 것이다.
         }, 3000);
     });
 });
