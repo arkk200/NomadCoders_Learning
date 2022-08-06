@@ -4,7 +4,7 @@
 // parsed.type을 이용하여 case를 여러개 사용하지도 않는다.
 
 import http from "http";
-import WebSocket from "ws";
+import SocketIO from 'socket.io';
 import express from "express";
 
 const app = express();
@@ -18,47 +18,38 @@ app.get("/*", (_, res) => res.redirect("/"));
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
 
 const server = http.createServer(app);
+const io = SocketIO(server);
+
+io.on("connection", socket => {
+    console.log(socket);
+})
+
+/*
 const wss = new WebSocket.Server({ server });
 
-// fake database
 const sockets = [];
 
-// on method는 백엔드에 연결된 사람의 정보를 제공한다.
-// 정보는 socket을 통해서 옴
-
-// server.js에 있는 socket은 연결된 브라우저를 뜻한다.
 wss.on("connection", socket => {
-    // 연결이 될 때마다 connection이벤트가 일어나고 sockets에 push 됨
     sockets.push(socket);
-    
-    // 닉네임이 없는 사람이 있을 수 있으므로
-    // 없는 사람은 Anon으로 설정
+
     socket["nickname"] = "Anon";
     
     console.log("Conneted to Browswer ♬");
 
-    // 브라우저가 다치면 close 이벤트가 감지되고 아래 코드가 실행된다.
     socket.on("close", () => console.log("Disconnted from Browser ※"))
 
-    // 백엔드에서도 메세지를 받을 때 프론트엔드에서 받았던 것처럼 message 이벤트를 쓰면 됨
     socket.on("message", (msg) => {
-        // 받은 메세지를 다시 JS로 바꿔줌
         const message = JSON.parse(msg.toString('utf8'));
         switch (message.type){
             case "new_message":
-                // 브라우저 배열에서 차례대로 메세지를 보냄
                 sockets.forEach(aSocket => aSocket.send(`${socket.nickname}: ${message.payload}`));
                 break;
             case "nickname":
-                // socket은 기본적으로 객체이다.
-                // 따라서 키, 값을 추가할 수 있다.
                 socket["nickname"] = message.payload;
                 break;
         }
     });
-    
-    // 백엔드에서 메세지를 보냄
-    // socket.send("hello");
 });
+*/
 
 server.listen(3000, handleListen);
