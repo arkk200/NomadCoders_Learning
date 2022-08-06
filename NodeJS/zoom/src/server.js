@@ -1,3 +1,8 @@
+// 결과적으로 백엔드와 프론트엔드는 이런식으로 만들지 않는다.
+// 백에서 프론트엔드의 메세지를 받고 parse한 후 프론트에 문자열 하나를 보내지 않고
+// 프론트에 데이터를 보낸 후 프론트에서 parse를 한다.
+// parsed.type을 이용하여 case를 여러개 사용하지도 않는다.
+
 import http from "http";
 import WebSocket from "ws";
 import express from "express";
@@ -21,7 +26,7 @@ const sockets = [];
 // on method는 백엔드에 연결된 사람의 정보를 제공한다.
 // 정보는 socket을 통해서 옴
 
-// server.hs에 있는 socket은 연결된 브라우저를 뜻한다.
+// server.js에 있는 socket은 연결된 브라우저를 뜻한다.
 wss.on("connection", socket => {
     // 연결이 될 때마다 connection이벤트가 일어나고 sockets에 push 됨
     sockets.push(socket);

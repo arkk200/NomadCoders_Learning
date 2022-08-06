@@ -47,6 +47,9 @@ function handleSubmit(event) {
     // type을 추가하여 백엔드에 보낸다. 단, 보낼 땐 문자열 형태로 보냄
     socket.send(makeMessage("new_message", input.value));
     // console.log(input.value);
+    const li = document.createElement('li');
+    li.innerText = `You: ${input.value}`;
+    messageList.append(li);
     input.value = '';
 }
 
