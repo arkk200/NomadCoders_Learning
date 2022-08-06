@@ -20,9 +20,21 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 const server = http.createServer(app);
 const io = SocketIO(server);
 
+/*
+socket.io로 넘어오며 발전된 점
+1. 직접 event를 만들 수 있다.
+2. 프론트엔드에서, JS object를 전송할 수 있다.
+*/
+
 io.on("connection", socket => {
-    console.log(socket);
-})
+    // socket.on 뒤에 원하는 이벤트를 넣으면 된다.
+    socket.on("enter_room", (msg, done) => {
+        console.log(msg);
+        setTimeout(() => {
+            done();
+        }, 3000);
+    });
+});
 
 /*
 const wss = new WebSocket.Server({ server });
