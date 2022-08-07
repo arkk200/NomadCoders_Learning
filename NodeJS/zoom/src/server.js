@@ -27,17 +27,17 @@ socket.io로 넘어오며 발전된 점
 */
 
 io.on("connection", socket => {
-    // onAny를 이용하면 들어온 이벤트를 알 수 있다.
     socket.onAny(event => {
         console.log(`Socket Event: ${event}`);
-    })
-    // socket.on 뒤에 원하는 이벤트를 넣으면 된다.
+    });
     socket.on("enter_room", (roomName, done) => {
-        // join을 이용하면 room에 참가할 수 있다.
         socket.join(roomName);
-
-        // 방에 참가한 뒤 실행할 함수 호출
         done();
+
+        // .to("방이름") 을 이용하면 특정 방에 이벤트를 emit하거나 할 수 있다.
+        // 단, 내 브라우저를 제외한 모든 페이지한테만 보냄
+        // 백에서도 마찬가지로 이벤트명을 커스텀할 수 있다.
+        socket.to(roomName).emit("welcome");
     });
 });
 
