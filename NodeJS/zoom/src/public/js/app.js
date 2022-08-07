@@ -18,12 +18,24 @@ function addMessage(msg) {
     ul.appendChild(li);
 }
 
+function handleMessageSubmit(event){
+    event.preventDefault();
+    const input = room.querySelector('input');
+    const value = input.value;
+    socket.emit("new_message", value, roomName, () => {
+        addMessage(`You: ${value}`);
+    });
+    input.value = '';
+}
+
 function showRoom() {
     welcome.hidden = true;
     room.hidden = false;
     // room에 있는 h3에 roomName을 적음
     const h3 = room.querySelector('h3');
     h3.innerText = `Room ${roomName}`;
+    const form = room.querySelector('form');
+    form.addEventListener('submit', handleMessageSubmit);
 }
 
 function handleRoomSubmit(event){
@@ -38,4 +50,11 @@ form.addEventListener("submit", handleRoomSubmit);
 
 socket.on("welcome", () => {
     addMessage("Someone joined!");
-})
+});
+
+socket.on("bye", () => {
+    addMessage("Someone left ㅠㅠ");
+});
+
+// 두번째 인자는 msg => {addMessage(msg);} 랑 같음
+socket.on("new_message", addMessage);

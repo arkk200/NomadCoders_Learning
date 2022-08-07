@@ -33,11 +33,14 @@ io.on("connection", socket => {
     socket.on("enter_room", (roomName, done) => {
         socket.join(roomName);
         done();
-
-        // .to("방이름") 을 이용하면 특정 방에 이벤트를 emit하거나 할 수 있다.
-        // 단, 내 브라우저를 제외한 모든 페이지한테만 보냄
-        // 백에서도 마찬가지로 이벤트명을 커스텀할 수 있다.
         socket.to(roomName).emit("welcome");
+    });
+    socket.on("disconnecting", () => {
+        socket.rooms.forEach(room => socket.to(room).emit("bye"));
+    });
+    socket.on('new_message', (msg, room, done) => {
+        socket.to(room).emit("new_message", msg);
+        done();
     });
 });
 
