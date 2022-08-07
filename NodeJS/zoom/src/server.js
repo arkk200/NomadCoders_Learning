@@ -37,6 +37,11 @@ function publicRooms() {
     return publicRooms;
 }
 
+function countRoom(roomName){
+    // Set은 .size을 이용해서 그 크기를 알 수 있다.
+    return io.sockets.adapter.rooms.get(roomName)?.size
+}
+
 io.on("connection", socket => {
     // 새로 접속한 사람에게 생성되어 있는 방을 표시해줌
     io.sockets.emit("room_change", publicRooms());
@@ -48,12 +53,12 @@ io.on("connection", socket => {
     socket.on("enter_room", (roomName, done) => {
         socket.join(roomName);
         done();
-        socket.to(roomName).emit("welcome", socket.nickname);
+        socket.to(roomName).emit("welcome", socket.nickname, countRoom(roomName));
         // io.sockets.emit()은 모든 socket에 메세지를 보낸다.
         io.sockets.emit("room_change", publicRooms());
     });
     socket.on("disconnecting", () => {
-        socket.rooms.forEach(room => socket.to(room).emit("bye", socket.nickname));
+        socket.rooms.forEach(room => socket.to(room).emit("bye", socket.nickname, countRoom(room) - 1));
     });
     socket.on("disconnect", () => {
         io.sockets.emit("room_change", publicRooms());
