@@ -22,15 +22,15 @@ const io = SocketIO(server);
 
 function publicRooms() {
     // io.sockets.adapter에는 sides와 rooms가 있는데
-    // rooms에서 sides에 없는 키는 public, 그렇지 않다면
+    // rooms에서 sids에 없는 키는 public, 그렇지 않다면
     // 서버와 브라우저간의 대화하는 private 아이디를 의미한다.
-    const {sockets: {adapter: {sides, rooms}, }, } = io;
+    const {sockets: {adapter: {sids, rooms}, }, } = io;
     const publicRooms = [];
     rooms.forEach((_, key) => {
         // JS에서 Map은 key, value값이 들어간다.
         // .set을 이용해서 (key, value)를 설정할 수 있고
         // .get을 이용해서 (key)로 value를 가져올 수 있다.
-        if (sides.get(key) === undefined){
+        if (sids.get(key) === undefined){
             publicRooms.push(key);
         }
     });
@@ -38,6 +38,8 @@ function publicRooms() {
 }
 
 io.on("connection", socket => {
+    // 새로 접속한 사람에게 생성되어 있는 방을 표시해줌
+    io.sockets.emit("room_change", publicRooms());
     socket['nickname'] = 'Anon';
     socket.onAny(event => {
         console.log(io.sockets.adapter);
@@ -47,9 +49,14 @@ io.on("connection", socket => {
         socket.join(roomName);
         done();
         socket.to(roomName).emit("welcome", socket.nickname);
+        // io.sockets.emit()은 모든 socket에 메세지를 보낸다.
+        io.sockets.emit("room_change", publicRooms());
     });
     socket.on("disconnecting", () => {
         socket.rooms.forEach(room => socket.to(room).emit("bye", socket.nickname));
+    });
+    socket.on("disconnect", () => {
+        io.sockets.emit("room_change", publicRooms());
     });
     socket.on('new_message', (msg, room, done) => {
         socket.to(room).emit("new_message", `${socket.nickname}: ${msg}`);

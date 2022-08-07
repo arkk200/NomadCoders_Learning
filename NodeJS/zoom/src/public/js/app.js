@@ -66,3 +66,15 @@ socket.on("bye", (left) => {
 
 // 두번째 인자는 msg => {addMessage(msg);} 랑 같음
 socket.on("new_message", addMessage);
+
+// 얘의 두번째 인자도 마찬가지로 msg => {console.log(msg);} 랑 같음
+socket.on("room_change", (rooms) => {
+    const roomList = welcome.querySelector('ul');
+    roomList.innerHTML = '';
+    if(rooms.length === 0) { return; }
+    rooms.forEach(room => {
+        const li = document.createElement('li');
+        li.innerText = room;
+        roomList.appendChild(li);
+    });
+});
