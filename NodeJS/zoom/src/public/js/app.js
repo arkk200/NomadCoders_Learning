@@ -32,6 +32,7 @@ function handleNicknameSubmit(event) {
     event.preventDefault();
     const input = room.querySelector('#name input');
     socket.emit('nickname', input.value);
+    input.value = '';
 }
 
 function showRoom() {
@@ -46,10 +47,13 @@ function showRoom() {
     nameForm.addEventListener('submit', handleNicknameSubmit);
 }
 
+let nickname = '';
 function handleRoomSubmit(event){
     event.preventDefault();
+    while(nickname === '') // 닉네임을 안 쳤을 경우
+        nickname = prompt("닉네임을 입력하세요.", 'nickname');
     const input = form.querySelector('input');
-    socket.emit("enter_room", input.value, showRoom);
+    socket.emit("enter_room", input.value, nickname, showRoom);
     roomName = input.value;
     input.value = '';
 }

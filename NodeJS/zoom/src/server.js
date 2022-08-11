@@ -4,7 +4,8 @@
 // parsed.type을 이용하여 case를 여러개 사용하지도 않는다.
 
 import http from "http";
-import SocketIO from 'socket.io';
+import {Server} from 'socket.io';
+import {instrument} from '@socket.io/admin-ui';
 import express from "express";
 
 const app = express();
@@ -18,7 +19,15 @@ app.get("/*", (_, res) => res.redirect("/"));
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
 
 const server = http.createServer(app);
-const io = SocketIO(server);
+const io = new Server(server, {
+    cors: {
+        origin: ["https://admin.socket.io"],
+        credentials: true,
+    },
+});
+instrument(io, {
+    auth: false
+});
 
 function publicRooms() {
     // io.sockets.adapter에는 sides와 rooms가 있는데
@@ -50,9 +59,12 @@ io.on("connection", socket => {
         console.log(io.sockets.adapter);
         console.log(`Socket Event: ${event}`);
     });
-    socket.on("enter_room", (roomName, done) => {
+    socket.on("enter_room", (roomName, nickname, done) => {
         socket.join(roomName);
         done();
+        socket.nickname = nickname;
+        // 자기자신한테도 환영메세지, 사람 수 보이게하기
+        socket.emit("welcome", socket.nickname, countRoom(roomName));
         socket.to(roomName).emit("welcome", socket.nickname, countRoom(roomName));
         // io.sockets.emit()은 모든 socket에 메세지를 보낸다.
         io.sockets.emit("room_change", publicRooms());
