@@ -81,6 +81,11 @@ function handleCamereClick(){
 
 async function handleCameraChange(){
     await getMedia(cameraSelect.value);
+    if(myPeerConnection){ // 카메라 바꾸는 것도 상대 브라우저에 반영되게 함
+        const videoTrack = myStream.getVideoTracks()[0];
+        const videoSender = myPeerConnection.getSenders().find(sender => sender.track.kind === "video");
+        videoSender.replaceTrack(videoTrack);
+    }
 }
 
 muteBtn.addEventListener('click', handleMuteClick);
