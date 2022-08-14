@@ -1,88 +1,46 @@
-// socket.io의 장점 중 하나는 서버를 닫는다면
-// 웹 브라우저가 연결을 계속 시도할 수 있게 해준다는 것이다.
-
 const socket = io();
 
-const welcome = document.getElementById('welcome');
-const form = welcome.querySelector('form');
-const room = document.getElementById('room');
+const myFace = document.getElementById('myFace');
+const muteBtn = document.getElementById('mute');
+const cameraBtn = document.getElementById('camera');
 
-room.hidden = true;
+let myStream;
+let muted = false;
+let cameraOff = false;
 
-let roomName;
-
-function addMessage(msg) {
-    const ul = room.querySelector('ul');
-    const li = document.createElement('li');
-    li.innerText = msg;
-    ul.appendChild(li);
+async function getMedia(){
+    try {
+        myStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,  
+        });
+        myFace.srcObject = myStream;
+    } catch (e) {
+        console.log(e);
+    }
 }
 
-function handleMessageSubmit(event){
-    event.preventDefault();
-    const input = room.querySelector('#msg input');
-    const value = input.value;
-    socket.emit("new_message", value, roomName, () => {
-        addMessage(`You: ${value}`);
-    });
-    input.value = '';
+getMedia();
+
+function handleMuteClick(){
+    console.log(myStream.getAudioTracks());
+    if(!muted){
+        muteBtn.innerText = "Unmute";
+        muted = true;
+    } else {
+        muteBtn.innerText = "Mute";
+        muted = false;
+    }
+}
+function handleCamereClick(){
+    if(cameraOff){
+        cameraBtn.innerText = "Turn Camera Off";
+        cameraOff = false;
+    } else {
+        cameraBtn.innerText = "Turn Camera On";
+        cameraOff = true;
+    }
 }
 
-function handleNicknameSubmit(event) {
-    event.preventDefault();
-    const input = room.querySelector('#name input');
-    socket.emit('nickname', input.value);
-    input.value = '';
-}
-
-function showRoom() {
-    welcome.hidden = true;
-    room.hidden = false;
-    // room에 있는 h3에 roomName을 적음
-    const h3 = room.querySelector('h3');
-    h3.innerText = `Room ${roomName}`;
-    const msgForm = room.querySelector('#msg');
-    const nameForm = room.querySelector('#name');
-    msgForm.addEventListener('submit', handleMessageSubmit);
-    nameForm.addEventListener('submit', handleNicknameSubmit);
-}
-
-let nickname = '';
-function handleRoomSubmit(event){
-    event.preventDefault();
-    while(nickname === '') // 닉네임을 안 쳤을 경우
-        nickname = prompt("닉네임을 입력하세요.", 'nickname');
-    const input = form.querySelector('input');
-    socket.emit("enter_room", input.value, nickname, showRoom);
-    roomName = input.value;
-    input.value = '';
-}
-
-form.addEventListener("submit", handleRoomSubmit);
-
-socket.on("welcome", (user, newCount) => {
-    const h3 = room.querySelector('h3');
-    h3.innerText = `Room ${roomName} (${newCount})`;
-    addMessage(`${user} arrived!`);
-});
-
-socket.on("bye", (left, newCount) => {
-    const h3 = room.querySelector('h3');
-    h3.innerText = `Room ${roomName} (${newCount})`;
-    addMessage(`${left} left ㅠㅠ`);
-});
-
-// 두번째 인자는 msg => {addMessage(msg);} 랑 같음
-socket.on("new_message", addMessage);
-
-// 얘의 두번째 인자도 마찬가지로 msg => {console.log(msg);} 랑 같음
-socket.on("room_change", (rooms) => {
-    const roomList = welcome.querySelector('ul');
-    roomList.innerHTML = '';
-    if(rooms.length === 0) { return; }
-    rooms.forEach(room => {
-        const li = document.createElement('li');
-        li.innerText = room;
-        roomList.appendChild(li);
-    });
-});
+muteBtn.addEventListener('click', handleMuteClick);
+cameraBtn.addEventListener('click', handleCamereClick);
