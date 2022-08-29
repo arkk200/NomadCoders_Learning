@@ -1,20 +1,14 @@
-def plus(a = 1, b = 1):
-    print(a, '+', b, '=', a + b)
+def tax_calc(money):
+    # tax_calc는 money매개변수를 통해 값을 받고
+    # 그 값에 0.35를 곱한 값을 반환한다.
+    return money * 0.35
 
-def minus(a = 1, b = 1):
-    print(a, '-', b, '=', a - b)
+def pay_tax(tax):
+    # 인자로 받은 값을 출력한다.
+    print("thank you for paying", tax)
 
-def multiplication(a = 1, b = 1):
-    print(a, '*', b, '=', a * b)
-
-def division(a = 1, b = 1):
-    print(a, '/', b, '=', a / b)
-
-def power(a = 1, b = 1):
-    print(a, '^', b, '=', a ** b)
-
-plus(7, 8)
-minus(13, 4)
-multiplication(7, 9)
-division(7, 3)
-power(4, 3)
+# 0.35를 곱한 값을 반환받고
+# 그 값을 변수 to_pay 집어 넣는다.
+to_pay = tax_calc(150000000)
+# 그 값을 pay_tax의 인자로 전달함
+pay_tax(to_pay)
