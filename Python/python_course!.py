@@ -1,10 +1,20 @@
-def say_hello(user_name, user_age): # 변수처럼 쓰면 된다. 이게 전달인자(parameter)이다.
-    # 쉼표(,)를 이용하여 문자열 사이에 데이터를 삽입할 수 있다.
-    print("hello", user_name)
-    print("you are", user_age, "years old")
+def plus(a = 1, b = 1):
+    print(a, '+', b, '=', a + b)
 
-# 함수에 들어가는 데이터를 인자(argument)라고 한다.
-say_hello("arkk", 12)
+def minus(a = 1, b = 1):
+    print(a, '-', b, '=', a - b)
 
-# 인자가 전달되는 순서가 중요하다.
-say_hello(20, "john", 1)
+def multiplication(a = 1, b = 1):
+    print(a, '*', b, '=', a * b)
+
+def division(a = 1, b = 1):
+    print(a, '/', b, '=', a / b)
+
+def power(a = 1, b = 1):
+    print(a, '^', b, '=', a ** b)
+
+plus(7, 8)
+minus(13, 4)
+multiplication(7, 9)
+division(7, 3)
+power(4, 3)
