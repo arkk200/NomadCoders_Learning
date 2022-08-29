@@ -1,14 +1,28 @@
-def tax_calc(money):
-    # tax_calc는 money매개변수를 통해 값을 받고
-    # 그 값에 0.35를 곱한 값을 반환한다.
-    return money * 0.35
+my_name = "arkk"
+my_age = 17
+my_color_eyes = "dark_brown"
 
-def pay_tax(tax):
-    # 인자로 받은 값을 출력한다.
-    print("thank you for paying", tax)
+# f"문자열{변수명}" 형태로 문자열 안에 변수를 집어 넣을 수 있다.
+# f를 빼면 중괄호, 변수명이 출력된다.
+print(
+    f"Hello, I'm {my_name}, I have {my_age} years in the earth, {my_color_eyes} is my eye color"
+)
 
-# 0.35를 곱한 값을 반환받고
-# 그 값을 변수 to_pay 집어 넣는다.
-to_pay = tax_calc(150000000)
-# 그 값을 pay_tax의 인자로 전달함
-pay_tax(to_pay)
+def make_juice(fruit):
+    return f"{fruit} +🥤"
+    # 함수에서 return을 만나면 값을 반환하고 빠져나온다.
+    print("asdfasdfasdfasdf")
+
+def add_ice(juice): 
+    return f"{juice}+🧊"
+
+def add_sugar(iced_juice):
+    return f"{iced_juice}+🍬"
+
+juice = make_juice("🍎")
+print(juice)
+cold_juice = add_ice(juice)
+print(cold_juice)
+perfect_juice = add_sugar(cold_juice)
+
+print(perfect_juice)
