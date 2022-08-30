@@ -1,31 +1,13 @@
-# input은 하나의 값만 받는다.
-age = int(input("How old are you?"))
+from random import randint
+# 외부 라이브러리를 불러오려면 import 라는 명령어를 써야한다.
 
-print("user answer", age)
+user_choice = int(input("Choose number:"))
+# randint(a, b)는 a와 b사이에 정수 중 임의의 값 하나를 반환해준다.
+pc_choice = randint(1, 50)
 
-# type()은 변수의 type을 알려주는 함수이다.
-print(type(age))
-
-# 입력 받은 값을 숫자와 비교하기 위해서 입력 받은 string을 int로 바꿔줘야한다.
-if age < 18:
-    print("You can't drink.")
-    # and 연산자는 두 조건 중 하나라도 거짓이면 거짓이다.
-elif age >= 18 and age <= 35:
-    print("You drink beer!")
-    # or 연산자는 두 조건 중 하나라도 참이면 참이다.
-elif age == 60 or age == 70:
-    print("Birithday party!")
-elif age >= 75:
-    print("Dangerous to drink beer")
-else:
-    print("Go ahead!")
-
-True and True == True
-True and False == False
-False and True == False
-False and False == False
-
-True or True == True
-True or False == True
-False or True == True
-False or False == False
+if user_choice == pc_choice:
+    print("You won!")
+elif user_choice > pc_choice:
+    print("Lower! Computer chose", pc_choice)
+elif user_choice < pc_choice:
+    print("Higher! Computer chose", pc_choice)
