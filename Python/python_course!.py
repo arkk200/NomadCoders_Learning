@@ -11,3 +11,11 @@ elif user_choice > pc_choice:
     print("Lower! Computer chose", pc_choice)
 elif user_choice < pc_choice:
     print("Higher! Computer chose", pc_choice)
+
+# while은 조건이 안 맞을 때까지 계속 출력하는 if 같은거다
+
+distance = 0
+# 0부터 1씩 증가하면서 출력하다가 값이 20이상이면 반복문을 끝낸다.
+while distance < 20:
+    print("I'm running:", distance, "km")
+    distance = distance + 1
