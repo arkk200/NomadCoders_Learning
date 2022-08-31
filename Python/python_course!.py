@@ -1,16 +1,10 @@
-from random import randint
+# 리스트를 쓸려면 대괄호를 이용해야한다.
+# 데이터를 넣을 땐 쉼표로 구분한다.
+days_of_week = ["Mon", "Tue", "Web", "Thur", "Fri"]
 
-print("Welcome to Python Casino")
-pc_choice = randint(1, 100)
+name = "nico"
 
-playing = True
-
-while playing:
-    user_choice = int(input("Choose number (1-100): "))
-    if user_choice == pc_choice:
-        print("You won!")
-        playing = False # 이겼다면 playing에 False를 대입해서 while문 빠져나옴
-    elif user_choice > pc_choice:
-        print("Lower!")
-    elif user_choice < pc_choice:
-        print("Higher!")
+# 문자열은 다양한 함수를 가지고 있다.
+print(name)
+# 문자열을 바로 써도 된다.
+print("nico".endswith("o"))
