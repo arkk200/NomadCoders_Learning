@@ -15,5 +15,21 @@ else:
         job_posts = job_section.find_all('li')
         job_posts.pop(-1) # 뒤에 항목은 view-all 버튼이므로 삭제함
         for post in job_posts:
-            print(post)
-            print("//////////////")
+            anchors = post.find_all('a')
+            anchor = anchors[1]
+            # 딕셔너리 형태로 태그의 속성값을 가져올 수 있다.
+            link = anchor['href']
+            company, kind, region = anchor.find_all('span', class_="company")
+            # find_all은 list를 가져오고, find는 결과를 가져온다.
+            title = anchor.find('span', class_="title")
+            print(company, kind, region, title)
+            print("/////////////////")
+            print("/////////////////")
+
+
+list_of_nums = [1, 2, 3]
+
+# 이런식으로 각각의 요소를 한 번에 세 변수에 할당해줄 수 있다.
+first, second, third = list_of_nums
+
+print(first, second, third)
