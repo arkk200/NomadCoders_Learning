@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask("JobScrapper")
 
@@ -7,6 +7,14 @@ app = Flask("JobScrapper")
 @app.route("/")
 def home():
     # Flask는 이렇게 return만 해주면 page에 띄워준다.
-    return 'Hello, Flask!'
+    # templates라는 폴더내에 (꼭 templates폴더여야함)
+    # html 파일을 만들어서 반환해줄 수 도 있다.
+    # 뒤에 인자로 html에 변수를 보낼 수 있다.
+    # 즉, 변수를 여러개 보낼 수 있다.
+    return render_template("home.html", name="nico")
+
+@app.route("/hello")
+def hello():
+    return 'Hello, you!'
 
 app.run("127.0.0.1")
