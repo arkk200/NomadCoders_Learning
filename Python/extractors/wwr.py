@@ -17,7 +17,7 @@ def extract_wwr_jobs(keyword):
                 anchors = post.find_all('a')
                 anchor = anchors[1]
                 link = anchor['href']
-                company, kind, region = anchor.find_all('span', class_="company")
+                company, _, region = anchor.find_all('span', class_="company")
                 title = anchor.find('span', class_="title")
                 # 데이터를 딕셔너리로 저장 후
                 job_data = {

@@ -1,21 +1,12 @@
-from extractors.indeed import extract_indeed_jobs
-from extractors.wwr import extract_wwr_jobs
-from extractors.remoteok import extract_remoteok_jobs
+from flask import Flask
 
-keyword = input("What do you want to search for?")
+app = Flask("JobScrapper")
 
-indeed = extract_indeed_jobs(keyword)
-wwr = extract_wwr_jobs(keyword)
-remoteok = extract_remoteok_jobs(keyword)
-jobs = indeed + wwr + remoteok
+# @가 붙은 이걸 decorator라고 한다.
+# decorator 밑에 바로 함수가 작성돼 있어야 한다.
+@app.route("/")
+def home():
+    # Flask는 이렇게 return만 해주면 page에 띄워준다.
+    return 'Hello, Flask!'
 
-# open은 파일 만들거나 읽을 수 있게 해준다.
-# csv는 comma-separated-value라는 파일 포맷이다.
-file = open(f"{keyword}.csv", 'w', encoding="utf-8") # w: writing
-# 파일 포맷 이름 그대로 쉼표로 열을 구분한다.
-file.write("Position,Company,Location,URL\n")
-
-for job in jobs:
-    file.write(f"{job['position']},{job['company']},{job['location']},{job['link']}\n")
-
-file.close() 
+app.run("127.0.0.1")
