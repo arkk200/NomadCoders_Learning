@@ -13,8 +13,8 @@ def home():
     # 즉, 변수를 여러개 보낼 수 있다.
     return render_template("home.html", name="nico")
 
-@app.route("/hello")
+@app.route("/search")
 def hello():
-    return 'Hello, you!'
+    return render_template("search.html")
 
 app.run("127.0.0.1")
