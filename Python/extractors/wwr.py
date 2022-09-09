@@ -22,9 +22,9 @@ def extract_wwr_jobs(keyword):
                 # 데이터를 딕셔너리로 저장 후
                 job_data = {
                     'link': f"https://weworkremotely.com{link}",
-                    'company':company.string,
-                    'region': region.string,
-                    'position': title.string
+                    'company': company.string.replace(',', ' '),
+                    'location': region.string.replace(',', ' '),
+                    'position':  title.string.replace(',', ' ')
                 }
                 # 리스트에 추가해준다.
                 results.append(job_data)
