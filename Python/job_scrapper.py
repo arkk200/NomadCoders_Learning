@@ -1,4 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+# request는 요청에 대한 정보에 접근할 수 있게 해준다.
+# URL, IP, Cokkies 정보 등등
+from extractors.indeed import extract_indeed_jobs
+from extractors.wwr import extract_wwr_jobs
+from extractors.remoteok import extract_remoteok_jobs
 
 app = Flask("JobScrapper")
 
@@ -14,7 +19,15 @@ def home():
     return render_template("home.html", name="nico")
 
 @app.route("/search")
-def hello():
-    return render_template("search.html")
+def search():
+    # request.args로 url의 정보에 접근할 수 있다.
+    # .get으로 키에 해당하는 값을 가져올 수 있다.
+    keyword = request.args.get("keyword")
+    # print(keyword)
+    indeed = extract_indeed_jobs(keyword)
+    wwr = extract_wwr_jobs(keyword)
+    remoteok = extract_remoteok_jobs(keyword)
+    jobs = indeed + wwr + remoteok
+    return render_template("search.html", keyword = keyword, jobs = jobs)
 
 app.run("127.0.0.1")
