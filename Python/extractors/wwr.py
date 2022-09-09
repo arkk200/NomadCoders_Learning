@@ -28,7 +28,11 @@ def extract_wwr_jobs(keyword):
                 }
                 # 리스트에 추가해준다.
                 results.append(job_data)
+        print(" weworkremotely ".center(70, '-'))
         for result in results:
-            print(result)
+            print('link:', result['link'] + 
+                ', company:', result['company'] + 
+                ', location:', result['location'] + 
+                ', position:', result['position'])
             print("///////////")
         return results

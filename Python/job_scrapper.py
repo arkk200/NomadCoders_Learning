@@ -1,11 +1,13 @@
 from extractors.indeed import extract_indeed_jobs
 from extractors.wwr import extract_wwr_jobs
+from extractors.remoteok import extract_remoteok_jobs
 
 keyword = input("What do you want to search for?")
 
 indeed = extract_indeed_jobs(keyword)
 wwr = extract_wwr_jobs(keyword)
-jobs = indeed + wwr
+remoteok = extract_remoteok_jobs(keyword)
+jobs = indeed + wwr + remoteok
 
 # open은 파일 만들거나 읽을 수 있게 해준다.
 # csv는 comma-separated-value라는 파일 포맷이다.
