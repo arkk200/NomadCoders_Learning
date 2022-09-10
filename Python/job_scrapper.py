@@ -18,16 +18,21 @@ def home():
     # 즉, 변수를 여러개 보낼 수 있다.
     return render_template("home.html", name="nico")
 
+db = {}
+
 @app.route("/search")
 def search():
     # request.args로 url의 정보에 접근할 수 있다.
     # .get으로 키에 해당하는 값을 가져올 수 있다.
     keyword = request.args.get("keyword")
-    # print(keyword)
-    indeed = extract_indeed_jobs(keyword)
-    wwr = extract_wwr_jobs(keyword)
-    remoteok = extract_remoteok_jobs(keyword)
-    jobs = indeed + wwr + remoteok
+    if keyword in db: # db에 있는 키워드라면 db에서 정보를 가져옴
+        jobs = db[keyword]
+    else: # db에 없는 키워드라면 extract함
+        indeed = extract_indeed_jobs(keyword)
+        wwr = extract_wwr_jobs(keyword)
+        remoteok = extract_remoteok_jobs(keyword)
+        jobs = indeed + wwr + remoteok
+        db[keyword] = jobs
     return render_template("search.html", keyword = keyword, jobs = jobs)
 
 app.run("127.0.0.1")
