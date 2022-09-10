@@ -11,7 +11,12 @@
 
 <body>
     <main class="container">
-        <h1>Search Results for "{{keyword}}":</h1>
+        <hgroup>
+            <h1>Search Results for "{{keyword}}":</h1>
+            <a target="_blank" href="/export?keyword={{keyword}}">
+                Export to file
+            </a>
+        </hgroup>
         <!-- pico css에서 figure로 가로 스크롤을 추가할 수 있다. -->
         <figure>
             <!-- pico css에서 table태그에 role="grid" 속성으로 가로줄을 추가할 수 있다 -->

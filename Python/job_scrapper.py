@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, send_file
 # request는 요청에 대한 정보에 접근할 수 있게 해준다.
 # URL, IP, Cokkies 정보 등등
 from extractors.indeed import extract_indeed_jobs
 from extractors.wwr import extract_wwr_jobs
 from extractors.remoteok import extract_remoteok_jobs
+from file import save_to_file
 
 app = Flask("JobScrapper")
 
@@ -25,6 +26,10 @@ def search():
     # request.args로 url의 정보에 접근할 수 있다.
     # .get으로 키에 해당하는 값을 가져올 수 있다.
     keyword = request.args.get("keyword")
+    print(keyword) # 사용자가 아무것도 작성하지 않았을 때 keyword는 None이다.
+    if keyword == None:
+        # return redirect로 페이지를 이동시킬 수 있다.
+        return redirect("/")
     if keyword in db: # db에 있는 키워드라면 db에서 정보를 가져옴
         jobs = db[keyword]
     else: # db에 없는 키워드라면 extract함
@@ -34,5 +39,19 @@ def search():
         jobs = indeed + wwr + remoteok
         db[keyword] = jobs
     return render_template("search.html", keyword = keyword, jobs = jobs)
+
+@app.route('/export')
+def export():
+    keyword = request.args.get("keyword")
+    if keyword == None: # 얘도 키워드가 없으면 홈으로 redirect한다.
+        return redirect("/")
+    if keyword not in db: # 검색한 키워드가 아니라면 검색창으로 이동해줌
+        return redirect(f"/search?keyword={keyword}")
+    # save_to_file로 서버의 파일 시스텝에 파일을 저장
+    save_to_file(keyword, db[keyword])
+    # send_file()을 반환한다.
+    # as_attachment를 True로 하면 다운로드할 수 있게 해준다.
+    return send_file(f"{keyword}.csv", as_attachment=True)
+
 
 app.run("127.0.0.1")
