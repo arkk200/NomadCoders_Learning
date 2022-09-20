@@ -1,0 +1,1 @@
+const names: readonly = 10; // JS에선 readonly가 컴파일되지 않는다.
