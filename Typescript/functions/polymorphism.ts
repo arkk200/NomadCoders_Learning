@@ -38,3 +38,60 @@ const a = superPrint2([1, 2, 3])
 const b = superPrint2([true, false, 3, 4])
 const c = superPrint2(["a", "b", "c"])
 const d = superPrint2([1, 2, true, "string"])
+
+// --- 제너릭 실제 사용 예 ---
+
+// 위에 코드랑 똑같지만 type을 만들지 않고 바로 적용한 것이다.
+function superPrint3<T>(a: T[]) {
+    return a[0]
+}
+
+const a2 = superPrint3([1, 2, 3])
+const b2 = superPrint3([true, false, 3, 4])
+const c2 = superPrint3(["a", "b", "c"])
+const d2 = superPrint3([1, 2, true, "string"])
+// 직접적으로 generic을 건들 수도 있다.
+// 하지만 typescript가 유추할 수 있게 안적는게 좋음
+const e2 = superPrint3<boolean>([false, true])
+
+
+
+// generic에 코드를 저장할 수도 있다.
+type Player<E> = {
+    name: string
+    extraInfo: E
+}
+type NicoExtra = {
+    favFood: string
+}
+// 타입을 생성하고 그 타입을 또다른 타입에 넣어서 쓸 수 있다.
+type NicoPlayer = Player<NicoExtra>
+
+const nico: NicoPlayer = {
+    name: 'nico',
+    extraInfo: {
+        favFood: 'kimchi'
+    }
+}
+
+// extraInfo에 넣을 generic이 null이기에 null로 설정한다.
+const lynn: Player<null> = {
+    name: 'lynn',
+    extraInfo:null
+}
+
+// typescript에 기본적인 타입에도 generic이 들어있다.
+// Array타입은 Array<T>로 generic이 있음
+type A = Array<number>
+
+let a3:A = [1, 2, 3, 4]
+
+// 이런식으로 숫자열 인자를 받을 수도 있지만
+function printAllNumbers(arr: number[]) {}
+// Array generic 형식으로도 쓸 수 있다.
+function printAllNumbers2(arr: Array<number>) {}
+
+/*
+또 다른 예로 ReactJS에서 state의 타입을 줄 때 
+'useState<타입>()' 형태로 줄 수 있다.
+*/
