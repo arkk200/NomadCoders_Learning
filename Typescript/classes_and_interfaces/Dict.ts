@@ -25,18 +25,28 @@ class Dict {
     def(term: string) {
         return this.words[term] // 단어의 정의를 반환함
     }
+    // static은 객체를 만들지 않더라도 사용가능한 변수나 메소드다.
+    static hello() {
+        return "hello"
+    }
 }
+Dict.hello() // 바로 사용 가능
 
 class Word {
     constructor(
-        public term: string,
-        public def: string
+        // 수정이 안되게 readonly속성을 추가함
+        public readonly term: string,
+        public readonly def: string
     ) {}
 }
 
 const kimchi = new Word("kimchi", "한국의 음식")
 
 const dict = new Dict()
+
+/*
+kimchi.def = "xxx"
+*/
 
 // 단어를 추가함
 dict.add(kimchi)
