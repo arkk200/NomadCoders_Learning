@@ -1,10 +1,5 @@
-import { init, exit } from 'myPackage';
+// tsconfig.json에서 "allowJS": true를 추가함으로써 
+// 불러온 함수의 타입을 TS가 추론할 수 있게 해줌
+import { init, exit } from './myPackage';
 
-init({
-    url:"true"
-})
-
-exit(1)
-
-// lib에 DOM이 있어야 쓸 수 있음
-localStorage.clear()
+init()

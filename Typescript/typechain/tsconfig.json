@@ -7,6 +7,8 @@
         // lib은 정의 파일
         "lib": ["ES6", "DOM"],
         // "string": true는 TS가 컴파일할 때 엄격하게 해준다.
-        "strict": true
+        "strict": true,
+        // allowJS를 쓰면 TS 내에서 JS파일을 불러올 수 있다.
+        "allowJs": true
     }
 }
