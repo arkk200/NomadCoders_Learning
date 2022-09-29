@@ -2,6 +2,9 @@
     "include": ["src"], // include는 타입스크립트가 폴더 내 모든 파일을 확인하게 만든다.
     "compilerOptions": {
         "outDir": "build", // outDir은 생선된 자바스크립트가 들어갈 디렉토리를 가르킨다.
-        "target": "ES6" // target은 컴파일 할 자바스크립트 버전을 나타낸다.
+        "target": "ES6", // target은 컴파일 할 자바스크립트 버전을 나타낸다.
+        // DOM을 쓰면 브라우저 환경에서 코드를 실행하겠다는 뜻을 나타낸다.
+        // "lib": ["ES6", "DOM"]
+        "lib": ["ES6"]
     }
 }
