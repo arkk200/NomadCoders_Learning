@@ -4,7 +4,9 @@
         "outDir": "build", // outDir은 생선된 자바스크립트가 들어갈 디렉토리를 가르킨다.
         "target": "ES6", // target은 컴파일 할 자바스크립트 버전을 나타낸다.
         // DOM을 쓰면 브라우저 환경에서 코드를 실행하겠다는 뜻을 나타낸다.
-        // "lib": ["ES6", "DOM"]
-        "lib": ["ES6"]
+        // lib은 정의 파일
+        "lib": ["ES6", "DOM"],
+        // "string": true는 TS가 컴파일할 때 엄격하게 해준다.
+        "strict": true
     }
 }

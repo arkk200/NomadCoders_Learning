@@ -1,12 +1,10 @@
-const hello = () => "world";
+import { init, exit } from 'myPackage';
 
-class Block {
-    constructor(private data: string) {}
-    static hello() {
-        return "world";
-    }
-}
+init({
+    url:"true"
+})
 
-// tsconfig.json에 lib에 DOM을 설정해주면 
-// document.createElement()
-// 등 웹에서 쓰이는 코드를 타입스크립트가 인지한다.
+exit(1)
+
+// lib에 DOM이 있어야 쓸 수 있음
+localStorage.clear()
