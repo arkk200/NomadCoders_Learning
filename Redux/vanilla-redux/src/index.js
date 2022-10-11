@@ -4,6 +4,8 @@ const add = document.getElementById('add');
 const minus = document.getElementById('minus');
 const number = document.querySelector('span');
 
+number.innerText = 0;
+
 const countModifier = (count = 0, action) => {
   console.log(count, action);
   if(action.type === "ADD") {
@@ -14,13 +16,16 @@ const countModifier = (count = 0, action) => {
     return count;
   }
 };
-
 const countStore = createStore(countModifier);
 
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "MINUS" });
+const onChange = () => {
+  number.innerText = countStore.getState();
+}
+
+// subscribe는 state가 변할 때마다 작동한다.
+countStore.subscribe(onChange)
+
 console.log(countStore.getState());
+
+add.addEventListener("click", () => countStore.dispatch({ type: "ADD" }))
+minus.addEventListener("click", () => countStore.dispatch({ type: "MINUS" }))
