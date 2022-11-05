@@ -13,8 +13,8 @@ const addToDo = text => {
 const deleteToDo = id => {
     return {
         type: DELETE,
-        id
-    }
+        id: parseInt(id)
+    };
 }
 
 const reducer = (state = [], action) => {
