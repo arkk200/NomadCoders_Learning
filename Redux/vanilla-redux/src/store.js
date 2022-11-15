@@ -1,19 +1,8 @@
-import { createStore } from "redux";
-import { createAction, createReducer } from '@reduxjs/toolkit';
+// import { createStore } from "redux";
+import { configureStore, createAction, createReducer } from '@reduxjs/toolkit';
 
 const addToDo = createAction("ADD");
 const deleteToDo = createAction("DELETE");
-
-/* const reducer = (state = [], action) => {
-    switch(action.type) {
-        case addToDo.type:
-            return [{ text: action.payload, id: Date.now() }, ...state];
-        case deleteToDo.type:
-            return state.filter(toDo => toDo.id !== action.payload);
-        default:
-            return state;
-    }
-}; */
 
 const reducer = createReducer([], {
     [addToDo]: (state, action) => {
@@ -24,7 +13,8 @@ const reducer = createReducer([], {
         state.filter(toDo => toDo.id !== action.payload)
 })
 
-const store = createStore(reducer);
+// configureStore는 chome Redux DevTools 확장 프로그램을 통해 브라우저에 개발 툴을 쓸 수 있게 해줌
+const store = configureStore({ reducer });
 
 export const actionCreators = {
     addToDo,
