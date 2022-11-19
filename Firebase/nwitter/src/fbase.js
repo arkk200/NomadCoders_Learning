@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     // 이런식으로 Github에 내 firebase API key를 안보이게 할 수 있다.
@@ -10,6 +11,7 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
-export default app;
+// getAuth가 반환한 객체의 .currentUser 변수는 User 또는 null을 가진다.
+export const authService = getAuth();
