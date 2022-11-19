@@ -14,4 +14,4 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 // getAuth가 반환한 객체의 .currentUser 변수는 User 또는 null을 가진다.
-export const authService = getAuth();
+export const auth = getAuth();
