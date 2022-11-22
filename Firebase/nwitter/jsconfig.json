@@ -1,4 +1,3 @@
-// jsconfig.json으로 root가 되는 폴더를 설정할 수 있다.
 {
     "compilerOptions": {
         "baseUrl": "src"
