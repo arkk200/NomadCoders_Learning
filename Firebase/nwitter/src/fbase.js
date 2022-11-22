@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import 'firebase/database';
 
 const firebaseConfig = {
     // 이런식으로 Github에 내 firebase API key를 안보이게 할 수 있다.
