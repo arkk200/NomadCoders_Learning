@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import 'firebase/database';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
     // 이런식으로 Github에 내 firebase API key를 안보이게 할 수 있다.
@@ -16,3 +16,4 @@ initializeApp(firebaseConfig);
 
 // getAuth가 반환한 객체의 .currentUser 변수는 User 또는 null을 가진다.
 export const auth = getAuth();
+export const db = getFirestore();
