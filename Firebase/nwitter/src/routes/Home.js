@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { db } from "fbase";
 import { addDoc, collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
+import Nweet from "components/Nweet";
 
 const Home = ({ userObj }) => {
-    console.log(userObj);
     const [nweet, setNweet] = useState('');
     const [nweets, setNweets] = useState([]); // db에 저장된 nweets
     useEffect(() => {
@@ -49,9 +49,13 @@ const Home = ({ userObj }) => {
                 <input type="submit" value="Nweet" />
             </form>
             <div>
-                {nweets.map(nweet => <div key={nweet.id}>
-                    <h4>{nweet.text}</h4>
-                </div>)}
+                {nweets.map(nweet => (
+                    <Nweet
+                        key={nweet.id}
+                        nweetObj={nweet}
+                        isOwner={nweet.creatorId === userObj.uid} // nweet.creatorId에 저장한 userObj.uid와 현재 로그인한 유저의 uid가 같은지 판별
+                    />
+                ))}
             </div>
         </div>
     )
