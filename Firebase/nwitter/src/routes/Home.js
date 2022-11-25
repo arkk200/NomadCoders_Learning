@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "fbase";
-import { addDoc, collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Nweet from "components/Nweet";
 
 const Home = ({ userObj }) => {
