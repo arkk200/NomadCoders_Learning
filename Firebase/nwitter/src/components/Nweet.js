@@ -23,21 +23,25 @@ const Nweet = ({ nweetObj, isOwner }) => {
         });
         setEditing(false);
     }
-    const onChange = e => setNewNweet(e.target.value); 
+    const onChange = e => setNewNweet(e.target.value);
     return (
         <div key={nweetObj.id}>
             {editing ? <>
-                <form onSubmit={onSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Edit your nweet"
-                        value={newNweet}
-                        required
-                        onChange={onChange}
-                    />
-                    <input type="submit" value="Done" />
-                </form>
-                <button onClick={toggleEditing}>cancel</button>
+                {
+                    isOwner && <>
+                        <form onSubmit={onSubmit}>
+                            <input
+                                type="text"
+                                placeholder="Edit your nweet"
+                                value={newNweet}
+                                required
+                                onChange={onChange}
+                            />
+                            <input type="submit" value="Done" />
+                        </form>
+                        <button onClick={toggleEditing}>cancel</button>
+                    </>
+                }
             </>
                 : <>
                     <h4>{nweetObj.text}</h4>
