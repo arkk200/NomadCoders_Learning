@@ -6,6 +6,7 @@ import Nweet from "components/Nweet";
 const Home = ({ userObj }) => {
     const [nweet, setNweet] = useState('');
     const [nweets, setNweets] = useState([]); // db에 저장된 nweets
+    const [attachment, setAttachment] = useState(); // attachment에 사진 정보를 담음
     useEffect(() => {
         const q = query(
             collection(db, "nweets"),
@@ -43,10 +44,13 @@ const Home = ({ userObj }) => {
         // FileReader의 .readAsDataURL로 정보를 읽고 로드가 됐다면
         // 로드가 되어 나온 이벤트 정보를 출력한다.
         reader.onloadend = (finishedEvent) => {
-            console.log(finishedEvent);
+            const { currentTarget: { result } } = finishedEvent;
+            setAttachment(result);
         }
         reader.readAsDataURL(theFile);
     }
+    // 클릭을 하면 사진 없앰
+    const onClearAttachmentClick = () => setAttachment(null);
     return (
         <div>
             <form onSubmit={onSubmit}>
@@ -59,6 +63,12 @@ const Home = ({ userObj }) => {
                 />
                 <input type="file" accept="image/*" onChange={onFileChange} />
                 <input type="submit" value="Nweet" />
+                {attachment && (
+                    <div>
+                        <img src={attachment} width="50px" height="50px" />
+                        <button onClick={onClearAttachmentClick}>Cancel upload</button>
+                    </div>
+                )}
             </form>
             <div>
                 {nweets.map(nweet => (
