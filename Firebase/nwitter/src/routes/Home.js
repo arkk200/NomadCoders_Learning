@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { db } from "fbase";
-import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { v4 } from 'uuid';
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Nweet from "components/Nweet";
+import { storage } from 'fbase';
+import { ref, uploadString } from "firebase/storage";
 
 const Home = ({ userObj }) => {
     const [nweet, setNweet] = useState('');
@@ -23,15 +26,18 @@ const Home = ({ userObj }) => {
     }, []);
     const onSubmit = async (e) => {
         e.preventDefault();
-        // getFirestore로 가져온 db를 
+        const fileRef = ref(storage, `${userObj.uid}/${v4()}`);
+        const response = await uploadString(fileRef, attachment, "data_url");
+        console.log(response);
+        // getFirestore로 가져온 db를
         // firebase/firestore에 collection에 컬렉션명과 함께 넣고
         // addDoc에 doc을 넣을 컬렉션과 뒤에 데이터를 넣으면 firestore에 저장된다.
-        await addDoc(collection(db, "nweets"), {
+        /* await addDoc(collection(db, "nweets"), {
             text: nweet,
             createdAt: Date.now(),
             creatorId: userObj.uid
         });
-        setNweet("")
+        setNweet(""); */
     }
     const onChange = e => {
         const { target: { value } } = e;
