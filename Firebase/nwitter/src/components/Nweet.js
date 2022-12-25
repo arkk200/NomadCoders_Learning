@@ -45,6 +45,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
             </>
                 : <>
                     <h4>{nweetObj.text}</h4>
+                    {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} width="50px" height="50px" /> }
                     { // Nweet의 주인이라면 삭제, 수정 버튼이 보이게 함
                         isOwner && <>
                             <button onClick={onDeleteClick}>Delete Nweet</button>

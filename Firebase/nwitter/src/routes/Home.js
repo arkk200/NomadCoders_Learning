@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { db } from "fbase";
 import { v4 } from 'uuid';
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Nweet from "components/Nweet";
 import { storage } from 'fbase';
-import { ref, uploadString } from "firebase/storage";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 const Home = ({ userObj }) => {
     const [nweet, setNweet] = useState('');
     const [nweets, setNweets] = useState([]); // db에 저장된 nweets
-    const [attachment, setAttachment] = useState(); // attachment에 사진 정보를 담음
+    const [attachment, setAttachment] = useState(""); // attachment에 사진 정보를 담음
     useEffect(() => {
         const q = query(
             collection(db, "nweets"),
@@ -26,18 +26,24 @@ const Home = ({ userObj }) => {
     }, []);
     const onSubmit = async (e) => {
         e.preventDefault();
-        const fileRef = ref(storage, `${userObj.uid}/${v4()}`);
-        const response = await uploadString(fileRef, attachment, "data_url");
-        console.log(response);
+        let attachmentUrl = "";
+        if (attachment != "") { // 만약 attachment가 비어있지 않다면 attachmentUrl에 사진 url 대입
+            const attachmentRef = ref(storage, `${userObj.uid}/${v4()}`);
+            const response = await uploadString(attachmentRef, attachment, "data_url");
+            attachmentUrl = await getDownloadURL(response.ref);
+        }
+        const nweetObj = {
+            text: nweet,
+            createdAt: Date.now(),
+            creatorId: userObj.uid,
+            attachmentUrl
+        }
         // getFirestore로 가져온 db를
         // firebase/firestore에 collection에 컬렉션명과 함께 넣고
         // addDoc에 doc을 넣을 컬렉션과 뒤에 데이터를 넣으면 firestore에 저장된다.
-        /* await addDoc(collection(db, "nweets"), {
-            text: nweet,
-            createdAt: Date.now(),
-            creatorId: userObj.uid
-        });
-        setNweet(""); */
+        await addDoc(collection(db, "nweets"), nweetObj);
+        setNweet("");
+        setAttachment("");
     }
     const onChange = e => {
         const { target: { value } } = e;
