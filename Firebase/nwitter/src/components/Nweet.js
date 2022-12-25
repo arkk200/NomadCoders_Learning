@@ -1,5 +1,6 @@
-import { db } from "fbase";
+import { db, storage } from "fbase";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import { useRef, useState } from "react";
 
 const Nweet = ({ nweetObj, isOwner }) => {
@@ -14,6 +15,9 @@ const Nweet = ({ nweetObj, isOwner }) => {
         // 차례대로 getFireStore(), collection 이름, doc아이디를 넣은 후
         // 반환된 값을 deleteDoc이나 updateDoc에 넣으면 삭제되거나 수정된다.
         await deleteDoc(changedNweet);
+        // Firebase storage에 데이터를 삭제하려면
+        // ref라는 함수를 이용해 url을 가져오고 deleteObject로 삭제하면 된다.
+        await deleteObject(ref(storage, nweetObj.attachmentUrl));
     };
     const toggleEditing = () => setEditing(prev => !prev);
     const onSubmit = async (e) => {

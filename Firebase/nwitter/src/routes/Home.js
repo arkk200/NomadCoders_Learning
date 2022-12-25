@@ -27,7 +27,7 @@ const Home = ({ userObj }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         let attachmentUrl = "";
-        if (attachment != "") { // 만약 attachment가 비어있지 않다면 attachmentUrl에 사진 url 대입
+        if (attachment !== "") { // 만약 attachment가 비어있지 않다면 attachmentUrl에 사진 url 대입
             const attachmentRef = ref(storage, `${userObj.uid}/${v4()}`);
             const response = await uploadString(attachmentRef, attachment, "data_url");
             attachmentUrl = await getDownloadURL(response.ref);
