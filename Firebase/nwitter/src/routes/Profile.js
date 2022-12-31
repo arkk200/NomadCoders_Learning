@@ -5,7 +5,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default ({ userObj }) => {
+export default ({ refreshUser, userObj }) => {
     const navigate = useNavigate();
     const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
     const onLogOutClick = () => {
@@ -32,9 +32,10 @@ export default ({ userObj }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         if(userObj.displayName !== newDisplayName) {
-            await updateProfile(userObj, { // updateProfile로 user의 정보를 업데이트 시킬 수 있다.
+            await updateProfile(auth.currentUser, { // updateProfile로 user의 정보를 업데이트 시킬 수 있다.
                 displayName: newDisplayName
-            })
+            });
+            refreshUser();
         }
     }
     return (
