@@ -10,9 +10,7 @@ export default ({ refreshUser, userObj }) => {
     const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
     const onLogOutClick = () => {
         signOut(auth); // signOut을 호출하면 sign out 된다.
-        setTimeout(() => {
-            navigate('/', {replace: true}); // 홈으로 이동한다.
-        }, 100);
+        navigate('/'); // 홈으로 이동한다.
     };
     const onChange = e => {
         setNewDisplayName(e.target.value);
